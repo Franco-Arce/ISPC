@@ -1,73 +1,69 @@
 class Zona:
     def __init__(self, nombre, capacidad):
-        self.__nombre = nombre
-        self.__capacidad = capacidad
-        self.__entradasDisponibles = capacidad
+        self.nombre = nombre
+        self.capacidad = capacidad
+        self.entradas_disponibles = capacidad
 
-    @property
-    def nombre(self):
-        return self.__nombre
+    def mostrar_entradas(self):
+        return f"Zona: {self.nombre} | Entradas disponibles: {self.entradas_disponibles}"
 
-    @property
-    def entradasDisponibles(self):
-        return self.__entradasDisponibles
-
-    def mostrarEntradasLibres(self):
-        print(f"Entradas disponibles en {self.__nombre}: {self.__entradasDisponibles}")
-
-    def venderEntradas(self, cantidad):
-        if cantidad > self.__entradasDisponibles:
-            print(f"No se pueden vender {cantidad} entradas en {self.__nombre}. Solo quedan {self.__entradasDisponibles}.")
+    def vender_entradas(self, cantidad):
+        if cantidad <= self.entradas_disponibles:
+            self.entradas_disponibles -= cantidad
+            return True
         else:
-            self.__entradasDisponibles -= cantidad
-            print(f"Se han vendido {cantidad} entradas en {self.__nombre}. Entradas restantes: {self.__entradasDisponibles}")
+            return False
 
-    def __str__(self):
-        return f"{self.__nombre} - Entradas disponibles: {self.__entradasDisponibles}"
+def menu():
+    print("\nGestión de Entradas - Expocoches")
+    print("1. Mostrar número de entradas libres")
+    print("2. Vender entradas")
+    print("3. Salir")
 
 def main():
-    # Crear las zonas con las capacidades iniciales
-    salaPrincipal = Zona("Sala Principal", 1000)
-    zonaCompraVenta = Zona("Zona Compra-Venta", 200)
-    zonaVIP = Zona("Zona VIP", 25)
+    # Crear zonas
+    zona_principal = Zona("Sala Principal", 1000)
+    zona_compra_venta = Zona("Zona Compra-Venta", 200)
+    zona_vip = Zona("Zona VIP", 25)
 
-    zonas = [salaPrincipal, zonaCompraVenta, zonaVIP]
+    zonas = {
+        "1": zona_principal,
+        "2": zona_compra_venta,
+        "3": zona_vip
+    }
 
     while True:
-        print("\n--MENÚ--")
-        print("1. Mostrar número de entradas libres")
-        print("2. Vender entradas")
-        print("3. Salir")
+        menu()
+        opcion = input("Elige una opción (1/2/3): ")
 
-        opcion = input("Seleccione una opción: ")
+        if opcion == '1':
+            print("\n-- ENTRADAS LIBRES --")
+            for zona in zonas.values():
+                print(zona.mostrar_entradas())
 
-        if opcion == "1":
-            print("\nEntradas libres por zona:")
-            for zona in zonas:
-                print(zona)  # Utiliza el método __str__ para mostrar las entradas disponibles
+        elif opcion == '2':
+            print("\n-- VENDER ENTRADAS --")
+            print("1. Sala Principal")
+            print("2. Zona Compra-Venta")
+            print("3. Zona VIP")
 
-        elif opcion == "2":
-            print("\nSeleccione la zona para vender entradas:")
-            for i, zona in enumerate(zonas, start=1):
-                print(f"{i}. {zona.nombre}")
-
-            try:
-                zonaSeleccionada = int(input("Ingrese el número de la zona: ")) - 1
-
-                if 0 <= zonaSeleccionada < len(zonas):
-                    cantidad = int(input(f"Ingrese la cantidad de entradas a vender en {zonas[zonaSeleccionada].nombre}: "))
-                    zonas[zonaSeleccionada].venderEntradas(cantidad)
+            zona_opcion = input("Elige la zona (1/2/3): ")
+            if zona_opcion in zonas:
+                cantidad = int(input("¿Cuántas entradas deseas vender? "))
+                zona = zonas[zona_opcion]
+                if zona.vender_entradas(cantidad):
+                    print(f"Se han vendido {cantidad} entradas en la {zona.nombre}.")
                 else:
-                    print("Opción de zona no válida.")
-            except ValueError:
-                print("Entrada inválida. Por favor, ingrese un número.")
+                    print(f"No hay suficientes entradas disponibles en la {zona.nombre}.")
+            else:
+                print("Opción de zona no válida.")
 
-        elif opcion == "3":
-            print("¡Gracias por usar el sistema de venta de entradas! Hasta luego.")
+        elif opcion == '3':
+            print("Saliendo del programa.")
             break
 
         else:
-            print("Opción no válida. Por favor, intente de nuevo.")
+            print("Opción no válida. Inténtelo de nuevo.")
 
 if __name__ == "__main__":
     main()
