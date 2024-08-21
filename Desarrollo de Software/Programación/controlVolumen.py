@@ -1,74 +1,56 @@
-from datetime import datetime, timedelta
+class ControlVolumen:
+    MIN_VOLUMEN = 1
+    MAX_VOLUMEN = 10
 
-class Producto:
-    idCounter = 1
-
-    def __init__(self, nombre, caducidad, precio):
-        self.id = Producto.idCounter
-        self.nombre = nombre
-        self.caducidad = datetime.strptime(caducidad, '%Y-%m-%d')
-        self.precioOriginal = precio
-        self.precio = precio
-        Producto.idCounter += 1
+    def __init__(self, volumen_medio=5):
+        self.volumen = volumen_medio
     
-    def calcularPrecio(self):
-        diasRestantes = (self.caducidad - datetime.now()).days
-        if diasRestantes < 0:
-            raise ValueError(f"El producto '{self.nombre}' está vencido y no se puede vender.")
-        elif diasRestantes < 3:
-            self.precio = self.precioOriginal * 0.3
-        elif diasRestantes <= 5:
-            self.precio = self.precioOriginal * 0.6
+    def ajustar_volumen(self, ajuste):
+        nuevo_volumen = self.volumen + ajuste
+        if nuevo_volumen < ControlVolumen.MIN_VOLUMEN:
+            self.volumen = ControlVolumen.MIN_VOLUMEN
+        elif nuevo_volumen > ControlVolumen.MAX_VOLUMEN:
+            self.volumen = ControlVolumen.MAX_VOLUMEN
         else:
-            self.precio = self.precioOriginal
+            self.volumen = nuevo_volumen
     
     def __str__(self):
-        return (f"ID: {self.id} | Nombre: {self.nombre} | Caducidad: {self.caducidad.strftime('%Y-%m-%d')} | "
-                f"Precio: ${self.precio:.2f}")
+        return f"Nivel de volumen actual: {self.volumen}"
 
-class Tienda:
-    def __init__(self):
-        self.productos = []
+def menu():
+    print("\nControl de Volumen")
+    print("1. Aumentar Volumen")
+    print("2. Disminuir Volumen")
+    print("3. Consultar Nivel de Volumen")
+    print("4. Salir")
 
-    def agregarProducto(self, nombre, caducidad, precio):
-        producto = Producto(nombre, caducidad, precio)
-        producto.calcularPrecio()
-        self.productos.append(producto)
-        print(f"Producto agregado: {producto}")
-    
-    def mostrarProductos(self):
-        print("\n--PRODUCTOS EN LA TIENDA--")
-        for producto in self.productos:
-            print(producto)
-    
-    def comprarProducto(self, idProducto):
-        for producto in self.productos:
-            if producto.id == idProducto:
-                try:
-                    producto.calcularPrecio()
-                    self.productos.remove(producto)
-                    print(f"\nCompraste: {producto.nombre} por ${producto.precio:.2f}")
-                    return
-                except ValueError as e:
-                    print(e)
-                    return
-        print(f"No se encontró el producto. ID: {idProducto}")
+def main():
+    control_volumen = ControlVolumen()
 
-# Ejemplo de uso
+    while True:
+        menu()
+        opcion = input("Elige una opción (1/2/3/4): ")
+
+        if opcion == '1':
+            ajuste = int(input("Ingrese la cantidad para aumentar el volumen: "))
+            control_volumen.ajustar_volumen(ajuste)
+            print("Volumen ajustado.")
+
+        elif opcion == '2':
+            ajuste = int(input("Ingrese la cantidad para disminuir el volumen: "))
+            control_volumen.ajustar_volumen(-ajuste)
+            print("Volumen ajustado.")
+
+        elif opcion == '3':
+            print(control_volumen)
+
+        elif opcion == '4':
+            print("Saliendo del programa.")
+            print(control_volumen)  # Mostrar el nivel final de volumen
+            break
+
+        else:
+            print("Opción no válida. Inténtelo de nuevo.")
+
 if __name__ == "__main__":
-    tienda = Tienda()
-
-    # Agregar producto
-    tienda.agregarProducto("Leche", "2024-08-25", 10.00)
-    tienda.agregarProducto("Queso", "2024-08-23", 15.00)
-    tienda.agregarProducto("Pan", "2024-08-21", 5.00)
-
-    # Mostrar productos
-    tienda.mostrarProductos()
-
-    # Comprar un producto
-    tienda.comprarProducto(2)  # Comprar Queso
-    tienda.comprarProducto(3)  # Comprar Pan (puede estar vencido según la fecha actual)
-
-    # Mostrar restantes
-    tienda.mostrarProductos()
+    main()
