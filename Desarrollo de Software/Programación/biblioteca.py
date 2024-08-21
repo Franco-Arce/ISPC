@@ -1,120 +1,130 @@
 class Libro:
-    def __init__(self, titulo, autor):
+    def __init__(self, titulo, autor, estado='disponible'):
         self.titulo = titulo
         self.autor = autor
-        self.estaPrestado = False
-
+        self.estado = estado
+    
     def prestar(self):
-        if not self.estaPrestado:
-            self.estaPrestado = True
-            print(f'El libro "{self.titulo}" ha sido prestado.')
+        if self.estado == 'disponible':
+            self.estado = 'prestado'
+            return True
         else:
-            print(f'El libro "{self.titulo}" ya está prestado.')
-
+            return False
+    
     def devolver(self):
-        if self.estaPrestado:
-            self.estaPrestado = False
-            print(f'El libro "{self.titulo}" ha sido devuelto.')
+        if self.estado == 'prestado':
+            self.estado = 'disponible'
+            return True
         else:
-            print(f'El libro "{self.titulo}" ya estaba disponible.')
-
+            return False
+    
     def __str__(self):
-        estado = "Prestado" if self.estaPrestado else "Disponible"
-        return f'Título: {self.titulo}, Autor: {self.autor}, Estado: {estado}'
+        return f"Título: {self.titulo} | Autor: {self.autor} | Estado: {self.estado}"
+
 
 class Biblioteca:
     def __init__(self):
         self.libros = []
-
-    def agregarLibro(self, libro):
+    
+    def agregar_libro(self, libro):
         self.libros.append(libro)
-        print(f'El libro "{libro.titulo}" ha sido agregado a la biblioteca.')
-
-    def buscarPorTitulo(self, titulo):
+    
+    def buscar_por_titulo(self, titulo):
+        resultados = [libro for libro in self.libros if libro.titulo.lower() == titulo.lower()]
+        return resultados
+    
+    def buscar_por_autor(self, autor):
+        resultados = [libro for libro in self.libros if libro.autor.lower() == autor.lower()]
+        return resultados
+    
+    def mostrar_estado_libro(self, titulo):
         for libro in self.libros:
             if libro.titulo.lower() == titulo.lower():
                 return libro
         return None
+    
+    def __str__(self):
+        return "\n".join(str(libro) for libro in self.libros)
 
-    def buscarPorAutor(self, autor):
-        resultados = []
-        for libro in self.libros:
-            if libro.autor.lower() == autor.lower():
-                resultados.append(libro)
-        return resultados
 
-    def buscar(self, criterio):
-        resultados = []
-        for libro in self.libros:
-            if criterio.lower() in libro.titulo.lower() or criterio.lower() in libro.autor.lower():
-                resultados.append(libro)
-        return resultados
-
-    def mostrarEstadoLibro(self, titulo):
-        libro = self.buscarPorTitulo(titulo)
-        if libro:
-            print(libro)
-        else:
-            print(f'No se encontró un libro con el título "{titulo}".')
-
-    def menu(self):
-        while True:
-            print("\n---MENÚ--")
-            print("1. Buscar libro por título")
-            print("2. Buscar libro por autor")
-            print("3. Prestar libro")
-            print("4. Devolver libro")
-            print("5. Salir")
-            opcion = input("Selecciona una opción: ")
-
-            if opcion == '1':
-                titulo = input("\nIntroduce el título del libro: ")
-                libro = self.buscarPorTitulo(titulo)
-                if libro:
+def main():
+    biblioteca = Biblioteca()
+    
+    # Agregar libros a la biblioteca
+    biblioteca.agregar_libro(Libro("Padre Rico, Padre Pobre", "Robert Kiyosaki"))
+    biblioteca.agregar_libro(Libro("El Principito", "Antoine de Saint-Exupéry"))
+    biblioteca.agregar_libro(Libro("1984", "George Orwell"))
+    
+    while True:
+        print("\nGestión de Biblioteca")
+        print("1. Buscar libro por título")
+        print("2. Buscar libro por autor")
+        print("3. Mostrar estado de un libro")
+        print("4. Prestar libro")
+        print("5. Devolver libro")
+        print("6. Mostrar todos los libros")
+        print("7. Salir")
+        
+        opcion = input("Elija una opción (1-7): ")
+        
+        if opcion == '1':
+            titulo = input("Ingrese el título del libro: ")
+            resultados = biblioteca.buscar_por_titulo(titulo)
+            if resultados:
+                for libro in resultados:
                     print(libro)
-                else:
-                    print(f'No se encontró un libro con el título "{titulo}".')
-
-            elif opcion == '2':
-                autor = input("\nIntroduce el autor del libro: ")
-                resultados = self.buscarPorAutor(autor)
-                if resultados:
-                    for libro in resultados:
-                        print(libro)
-                else:
-                    print(f'No se encontraron libros por el autor "{autor}".')
-
-            elif opcion == '3':
-                titulo = input("\nIntroduce el título del libro a prestar: ")
-                libro = self.buscarPorTitulo(titulo)
-                if libro:
-                    libro.prestar()
-                else:
-                    print(f'No se encontró un libro con el título "{titulo}".')
-
-            elif opcion == '4':
-                titulo = input("\nIntroduce el título del libro a devolver: ")
-                libro = self.buscarPorTitulo(titulo)
-                if libro:
-                    libro.devolver()
-                else:
-                    print(f'No se encontró un libro con el título "{titulo}".')
-
-            elif opcion == '5':
-                print("Saliendo del programa.")
-                break
-
             else:
-                print("Opción no válida. Por favor, selecciona una opción del 1 al 5.")
+                print("No se encontraron libros con ese título.")
+        
+        elif opcion == '2':
+            autor = input("Ingrese el autor del libro: ")
+            resultados = biblioteca.buscar_por_autor(autor)
+            if resultados:
+                for libro in resultados:
+                    print(libro)
+            else:
+                print("No se encontraron libros de ese autor.")
+        
+        elif opcion == '3':
+            titulo = input("Ingrese el título del libro: ")
+            libro = biblioteca.mostrar_estado_libro(titulo)
+            if libro:
+                print(libro)
+            else:
+                print("No se encontró el libro.")
+        
+        elif opcion == '4':
+            titulo = input("Ingrese el título del libro a prestar: ")
+            libro = biblioteca.mostrar_estado_libro(titulo)
+            if libro:
+                if libro.prestar():
+                    print(f"El libro '{titulo}' ha sido prestado.")
+                else:
+                    print(f"El libro '{titulo}' ya está prestado.")
+            else:
+                print("No se encontró el libro.")
+        
+        elif opcion == '5':
+            titulo = input("Ingrese el título del libro a devolver: ")
+            libro = biblioteca.mostrar_estado_libro(titulo)
+            if libro:
+                if libro.devolver():
+                    print(f"El libro '{titulo}' ha sido devuelto.")
+                else:
+                    print(f"El libro '{titulo}' ya está disponible.")
+            else:
+                print("No se encontró el libro.")
+        
+        elif opcion == '6':
+            print("\n-- Todos los libros en la biblioteca --")
+            print(biblioteca)
+        
+        elif opcion == '7':
+            print("Saliendo del programa.")
+            break
+        
+        else:
+            print("Opción no válida. Inténtelo de nuevo.")
 
-biblioteca = Biblioteca()
-
-libro1 = Libro("Cien años de soledad", "Gabriel García Márquez")
-libro2 = Libro("El amor en los tiempos del cólera", "Gabriel García Márquez")
-libro3 = Libro("Don Quijote de la Mancha", "Miguel de Cervantes")
-
-biblioteca.agregarLibro(libro1)
-biblioteca.agregarLibro(libro2)
-biblioteca.agregarLibro(libro3)
-
-biblioteca.menu()
+if __name__ == "__main__":
+    main()
