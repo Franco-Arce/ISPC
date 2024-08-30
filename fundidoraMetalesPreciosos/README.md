@@ -2,10 +2,11 @@
 ---
 
 # Actividad Individual: Diseño y Desarrollo de Objetos
-
+![Fundidora de Metales preciosos](https://github.com/user-attachments/assets/7f77e028-0016-45d5-aa6b-c742d8c2bc23)
 ## Objetivo
 
-Diseñar y desarrollar una clase en Python que represente una fundidora de metales, aplicando TDD (Desarrollo Guiado por Pruebas), conceptos de Programación Orientada a Objetos (POO) y diseñando la base de datos correspondiente.
+Diseñar 
+y desarrollar una clase en Python que represente una fundidora de metales, aplicando TDD (Desarrollo Guiado por Pruebas), conceptos de Programación Orientada a Objetos (POO) y diseñando la base de datos correspondiente.
 
 ## Descripción del Código
 
