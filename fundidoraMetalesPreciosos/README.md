@@ -55,7 +55,7 @@ Método estándar implementado:
 
 Para una demostración del funcionamiento del programa y una breve explicación sobre la aplicación de los principios de POO y TDD, adjunto link al siguiente video en YouTube:
 
-[Ver Video de Presentación](https://youtu.be/jgo0ybp8iwQ)
+[Ver Video de Presentación](https://youtu.be/BADQmpgejzo)
 
 
 ## Archivos Incluidos
