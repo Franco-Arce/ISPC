@@ -1,4 +1,3 @@
-# fundidora.py
 
 class Fundidora:
     # Metales soportados por la Fundidora, instanciando la temperatura necesaria por metal
@@ -10,9 +9,9 @@ class Fundidora:
     }
 
     def __init__(self, capacidad, temperatura_maxima):
-        self.capacidad = capacidad  # Capacidad máxima de la fundidora en gramos
+        self.__capacidad = capacidad  # Capacidad máxima de la fundidora en gramos
         self.temperatura_maxima = temperatura_maxima  # Temperatura máxima que puede alcanzar la fundidora
-        self.temperatura_actual = 0  # Temperatura actual de la fundidora
+        self.__temperatura_actual = 0  # Temperatura actual de la fundidora
         self.material_fundido = 0  # Cantidad de material fundido
         self.tipo_metal = None  # Tipo de metal a fundir
         self.temperatura_necesaria = 0  # Temperatura necesaria para fundir el metal seleccionado
@@ -29,29 +28,29 @@ class Fundidora:
         """Calienta la fundidora a la temperatura necesaria para el metal seleccionado."""
         if self.temperatura_necesaria > self.temperatura_maxima:
             raise ValueError(f"La temperatura necesaria ({self.temperatura_necesaria}°C) excede la capacidad máxima de la fundidora.")
-        self.temperatura_actual = self.temperatura_necesaria
-        print(f"Fundidora calentada a {self.temperatura_actual}°C para fundir {self.tipo_metal}.")
+        self.__temperatura_actual = self.temperatura_necesaria
+        print(f"Fundidora calentada a {self.__temperatura_actual}°C para fundir {self.tipo_metal}.")
 
     def fundir_material(self, cantidad):
         """Funde una cantidad de material, siempre que no exceda la capacidad de la fundidora."""
-        if cantidad > self.capacidad:
+        if cantidad > self.__capacidad:
             raise ValueError("La cantidad de material excede la capacidad de la fundidora.")
-        if self.temperatura_actual < self.temperatura_necesaria:
-            raise ValueError(f"La temperatura actual ({self.temperatura_actual}°C) no es suficiente para fundir {self.tipo_metal}.")
+        if self.__temperatura_actual < self.temperatura_necesaria:
+            raise ValueError(f"La temperatura actual ({self.__temperatura_actual}°C) no es suficiente para fundir {self.tipo_metal}.")
         self.material_fundido += cantidad
         print(f"Se han fundido {cantidad} gramos de {self.tipo_metal}.")
 
     def verificar_pureza(self):
         """Calcula la pureza del material fundido basado en la temperatura actual."""
-        if self.temperatura_actual >= 1000:
+        if self.__temperatura_actual >= 1000:
             return 99.9
         else:
             return 90.0
 
     def __str__(self):
         """Devuelve una cadena que describe el estado actual de la fundidora."""
-        return (f"Fundidora con capacidad de {self.capacidad}g, "
-                f"temperatura actual de {self.temperatura_actual}°C, "
+        return (f"Fundidora con capacidad de {self.__capacidad}g, "
+                f"temperatura actual de {self.__temperatura_actual}°C, "
                 f"material fundido {self.material_fundido}g.")
 
 if __name__ == "__main__":
