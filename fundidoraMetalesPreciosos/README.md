@@ -2,7 +2,8 @@
 ---
 
 # Actividad Individual: Diseño y Desarrollo de Objetos
-![Fundidora de Metales preciosos](https://github.com/user-attachments/assets/7f77e028-0016-45d5-aa6b-c742d8c2bc23)
+![Fundidora de Metales preciosos](https://github.com/user-attachments/assets/c3106541-74c3-4343-acd1-dfe4c63ef992)
+
 ## Objetivo
 
 Diseñar 
